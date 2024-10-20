@@ -1,0 +1,47 @@
+### 1. POST request to create the first expense
+POST http://localhost:3000/expenses
+Content-Type: application/json
+
+{
+  "description": "Groceries",
+  "category": "Food",
+  "amount": 45.67,
+  "date": "2024-10-18"
+}
+
+### 2. Capture the ID of the first expense
+@firstExpenseId = {{response.body._id}}
+
+### 3. POST request to create the second expense
+POST http://localhost:3000/expenses
+Content-Type: application/json
+
+{
+  "description": "Coffee with Friends",
+  "category": "Entertainment",
+  "amount": 12.50,
+  "date": "2024-10-17"
+}
+
+### 4. Capture the ID of the second expense
+@secondExpenseId = {{response.body._id}}
+
+### 5. GET all expenses
+GET http://localhost:3000/expenses
+
+### 6. GET a specific expense by ID (First expense)
+GET http://localhost:3000/expenses/{{firstExpenseId}}
+
+### 7. PUT update the first expense (Update amount of the first expense)
+PUT http://localhost:3000/expenses/{{firstExpenseId}}
+Content-Type: application/json
+
+{
+  "amount": 50.00
+}
+
+### 8. DELETE the second expense
+DELETE http://localhost:3000/expenses/{{secondExpenseId}}
+
+### 9. GET all expenses (Verify one is deleted and one is updated)
+GET http://localhost:3000/expenses

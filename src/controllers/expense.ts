@@ -1,0 +1,74 @@
+// src/controllers/expenseController.ts
+import { Request, Response } from 'express';
+import Expense from '../models/expense';
+
+const handleError = (error: unknown, res: Response, statusCode: number = 500) => {
+    if (error instanceof Error) {
+        res.status(statusCode).json({ message: error.message });
+    } else {
+        res.status(statusCode).json({ message: 'An unknown error occurred' });
+    }
+};
+
+// Create a new expense
+export const createExpense = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const expense = new Expense(req.body);
+        const savedExpense = await expense.save();
+        res.status(201).json(savedExpense);
+    } catch (error) {
+        handleError(error, res, 400);
+    }
+};
+
+// Get all expenses
+export const getAllExpenses = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const expenses = await Expense.find();
+        res.status(200).json(expenses);
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
+// Get a single expense by ID
+export const getExpenseById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const expense = await Expense.findById(req.params.id);
+        if (expense) {
+            res.status(200).json(expense);
+        } else {
+            res.status(404).json({ message: 'Expense not found' });
+        }
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
+// Update an expense
+export const updateExpense = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const updatedExpense = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (updatedExpense) {
+            res.status(200).json(updatedExpense);
+        } else {
+            res.status(404).json({ message: 'Expense not found' });
+        }
+    } catch (error) {
+        handleError(error, res, 400);
+    }
+};
+
+// Delete an expense
+export const deleteExpense = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
+        if (deletedExpense) {
+            res.status(200).json({ message: 'Expense deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Expense not found' });
+        }
+    } catch (error) {
+        handleError(error, res);
+    }
+};
