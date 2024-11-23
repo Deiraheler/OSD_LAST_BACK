@@ -1,4 +1,3 @@
-// src/controllers/expenseController.ts
 import { Request, Response } from 'express';
 import Expense from '../models/expense';
 
@@ -24,8 +23,37 @@ export const createExpense = async (req: Request, res: Response): Promise<void> 
 // Get all expenses
 export const getAllExpenses = async (req: Request, res: Response): Promise<void> => {
     try {
-        const expenses = await Expense.find();
-        res.status(200).json(expenses);
+        const { page = 1, limit = 9, sortBy = 'date', sortOrder = 'asc' } = req.query;
+
+        const pageNumber = parseInt(page as string, 10);
+        const limitNumber = parseInt(limit as string, 10);
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const sortOptions = { [sortBy as string]: sortOrder === 'asc' ? 1 : -1 } as Record<string, 1 | -1>;
+
+        const expenses = await Expense.find()
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(limitNumber);
+
+        const totalItems = await Expense.countDocuments();
+
+        res.status(200).json({
+            totalItems,
+            totalPages: Math.ceil(totalItems / limitNumber),
+            currentPage: pageNumber,
+            expenses,
+        });
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
+//Get all categories
+export const getAllCategories = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const categories = await Expense.distinct('category');
+        res.status(200).json(categories);
     } catch (error) {
         handleError(error, res);
     }

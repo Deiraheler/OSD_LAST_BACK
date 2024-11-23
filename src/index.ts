@@ -2,6 +2,7 @@ import express, {Application, Request, Response} from "express" ;
 import dotenv from "dotenv";
 import routes from "./routes/routes";
 import mongoose from "mongoose";
+import cors from "cors";
 
 dotenv.config();
 
@@ -9,8 +10,14 @@ const PORT = process.env.PORT || 3001;
 
 const app: Application = express();
 
-app.use(express.json());
+const allowedOrigins = ['http://localhost:4200', 'http://192.168.1.9:4200'];
 
+const options: cors.CorsOptions = {
+    origin: allowedOrigins
+};
+
+app.use(express.json());
+app.use(cors(options));
 app.use("/expenses", routes);
 
 const mongo = mongoose;
