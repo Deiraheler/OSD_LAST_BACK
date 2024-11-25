@@ -9,7 +9,7 @@ export interface IExpense extends Document {
 
 const ExpenseSchema = new Schema<IExpense>({
     description: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: String, default: 'None', required: true },
     amount: { type: Number, required: true },
     date: { type: Date, required: true },
 });

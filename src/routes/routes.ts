@@ -4,13 +4,14 @@ import {
     getAllExpenses,
     getExpenseById,
     updateExpense,
-    deleteExpense
+    deleteExpense, getAllCategories
 } from '../controllers/expense';
 
 const router = Router();
 
 router.post('/', createExpense);
 router.get('/', getAllExpenses);
+router.get('/categories', getAllCategories);
 router.get('/:id', getExpenseById);
 router.put('/:id', updateExpense);
 router.delete('/:id', deleteExpense);
