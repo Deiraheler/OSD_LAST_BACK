@@ -18,7 +18,7 @@ const options: cors.CorsOptions = {
 
 app.use(express.json());
 app.use(cors(options));
-app.use("/expenses", routes);
+app.use("/api", routes);
 
 const mongo = mongoose;
 

@@ -1,19 +1,11 @@
-import { Router } from 'express';
-import {
-    createExpense,
-    getAllExpenses,
-    getExpenseById,
-    updateExpense,
-    deleteExpense, getAllCategories
-} from '../controllers/expense';
+import expenses from "./expenses";
+import { Router } from "express";
+import users from "./users";
+import auth from "./auth";
 
 const router = Router();
 
-router.post('/', createExpense);
-router.get('/', getAllExpenses);
-router.get('/categories', getAllCategories);
-router.get('/:id', getExpenseById);
-router.put('/:id', updateExpense);
-router.delete('/:id', deleteExpense);
-
+router.use("/expenses", expenses);
+router.use("/users", users);
+router.use("/auth", auth)
 export default router;
