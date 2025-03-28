@@ -23,7 +23,7 @@ app.use("/api", routes);
 const mongo = mongoose;
 
 // MongoDB Connection
-mongo.connect('mongodb://localhost:27017/expenses')
+mongo.connect('mongodb+srv://severin911:81346573195d@cluster0.hnfgomk.mongodb.net/expenses?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.error('connection error:', err));
 
