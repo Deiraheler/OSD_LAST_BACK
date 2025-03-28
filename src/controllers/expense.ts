@@ -9,6 +9,33 @@ const handleError = (error: unknown, res: Response, statusCode: number = 500) =>
     }
 };
 
+export const updateExpenseStatus = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
+    try {
+        const expenseId = req.params.id;
+        const { status } = req.body;
+
+        // Validate that status is one of the allowed values
+        if (!['approved', 'rejected'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status provided.' });
+        }
+
+        const updatedExpense = await Expense.findByIdAndUpdate(
+            expenseId,
+            { status },
+            { new: true }
+        );
+
+        if (updatedExpense) {
+            return res.status(200).json(updatedExpense);
+        } else {
+            return res.status(404).json({ message: 'Expense not found.' });
+        }
+    } catch (error: any) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
 // Create a new expense
 export const createExpense = async (req: Request, res: Response): Promise<void> => {
     try {

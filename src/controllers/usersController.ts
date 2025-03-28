@@ -14,7 +14,7 @@ export const register = async (req: Request, res: Response) => {
     const newUser = new User({ email, password, name });
     await newUser.save();
 
-    const token = generateToken({ id: newUser._id, email: newUser.email, name: newUser.name });
+    const token = generateToken({ id: newUser._id, email: newUser.email, name: newUser.name, admin: newUser.admin });
     res.status(201).json({ token });
   } catch (error: any) {
     res.status(500).json({ message: 'Internal server error', error: error.message });
@@ -30,7 +30,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const token = generateToken({ id: user._id, email: user.email, name: user.name });
+    const token = generateToken({ id: user._id, email: user.email, name: user.name, admin: user.admin });
     res.status(200).json({ token });
   } catch (error: any) {
     res.status(500).json({ message: 'Internal server error', error: error.message });
